@@ -1,0 +1,92 @@
+setup durable EID project
+1. useing MSSQL local version, swtich to release branch, git checkout release
+2. in C:\git-repo\mdm\validator\src\main\resources\application-default.yml make sure datasource is set with url: jdbc:sqlserver://localhost:1433;databaseName=VALIDATOR;sendStringParametersAsUnicode=false;
+3. manually run sql to create all DB in MSSQL, turn off "Enforce password policy of the security login on MSSQL for specific credential of an account
+    -- AGG_RCIF
+    CREATE DATABASE AGG_RCIF;
+    GO
+    USE AGG_RCIF;
+
+    CREATE LOGIN agg_rcif_owner WITH PASSWORD = 'P@55w0rd';
+    CREATE USER agg_rcif_owner FOR LOGIN agg_rcif_owner;
+    CREATE USER agg_rcif_owner FOR LOGIN agg_rcif_owner;
+    EXEC sp_addrolemember N'db_owner', N'agg_rcif_owner';
+
+    CREATE LOGIN agg_rcif_user WITH PASSWORD = 'P@55w0rd';
+    CREATE USER agg_rcif_user FOR LOGIN agg_rcif_user;
+    EXEC sp_addrolemember N'db_datareader', N'agg_rcif_user';
+    EXEC sp_addrolemember N'db_datawriter', N'agg_rcif_user';
+
+    -- AGG_SHAW
+    CREATE DATABASE AGG_SHAW;
+    GO
+    USE AGG_SHAW;
+
+    CREATE LOGIN agg_shaw_owner WITH PASSWORD = 'P@55w0rd';
+    CREATE USER agg_shaw_owner FOR LOGIN agg_shaw_owner;
+    EXEC sp_addrolemember N'db_owner', N'agg_shaw_owner';
+
+    CREATE LOGIN agg_shaw_user WITH PASSWORD = 'P@55w0rd';
+    CREATE USER agg_shaw_user FOR LOGIN agg_shaw_user;
+    EXEC sp_addrolemember N'db_datareader', N'agg_shaw_user';
+    EXEC sp_addrolemember N'db_datawriter', N'agg_shaw_user';
+
+    -- TARGETER
+    CREATE DATABASE TARGETER;
+    GO
+    USE TARGETER;
+
+    CREATE LOGIN targeter_owner WITH PASSWORD = 'P@55w0rd';
+    CREATE USER targeter_owner FOR LOGIN targeter_owner;
+    EXEC sp_addrolemember N'db_owner', N'targeter_owner';
+
+    CREATE LOGIN targeter_user WITH PASSWORD = 'P@55w0rd';
+    CREATE USER targeter_user FOR LOGIN targeter_user;
+    EXEC sp_addrolemember N'db_datareader', N'targeter_user';
+    EXEC sp_addrolemember N'db_datawriter', N'targeter_user';
+
+    -- VALIDATOR
+    CREATE DATABASE VALIDATOR;
+    GO
+    USE VALIDATOR;
+
+    CREATE LOGIN validator_owner WITH PASSWORD = 'P@55w0rd';
+    CREATE USER validator_owner FOR LOGIN validator_owner;
+    EXEC sp_addrolemember N'db_owner', N'validator_owner';
+
+    CREATE LOGIN validator_user WITH PASSWORD = 'P@55w0rd';
+    CREATE USER validator_user FOR LOGIN validator_user;
+    EXEC sp_addrolemember N'db_datareader', N'validator_user';
+    EXEC sp_addrolemember N'db_datawriter', N'validator_user';
+
+    -- VALIDATOR2
+    CREATE DATABASE VALIDATOR2;
+    GO
+    USE VALIDATOR2;
+
+    CREATE LOGIN validator_owner WITH PASSWORD = 'P@55w0rd';
+    CREATE USER validator_owner FOR LOGIN validator_owner;
+    EXEC sp_addrolemember N'db_owner', N'validator_owner';
+
+    CREATE LOGIN validator_user WITH PASSWORD = 'P@55w0rd';
+    CREATE USER validator_user FOR LOGIN validator_user;
+    EXEC sp_addrolemember N'db_datareader', N'validator_user';
+    EXEC sp_addrolemember N'db_datawriter', N'validator_user';
+
+
+          -- CARD
+          CREATE DATABASE CARD;
+          GO
+          USE CARD;
+          CREATE LOGIN card_owner WITH PASSWORD = 'P@55w0rd';
+          CREATE USER card_owner FOR LOGIN card_owner;
+          EXEC sp_addrolemember N'db_owner', N'card_owner';
+
+      CREATE LOGIN card_user WITH PASSWORD = 'P@55w0rd';
+      CREATE USER card_user FOR LOGIN card_user;
+      EXEC sp_addrolemember N'db_datareader', N'card_user';
+      EXEC sp_addrolemember N'db_datawriter', N'card_user';
+
+    4. start the docker container to have the service
+    5. start BDD service from IntelliJ
+    6. ingestion of AGG_SHAW and AGG_RCIF with CSV data then run their aggregator till they are complete. message would show each data complete on logs
