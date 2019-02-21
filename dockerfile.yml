@@ -1,0 +1,40 @@
+version: "3.0"
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:4.0.0
+    restart: always
+    ports:
+    - "22181:2181"
+    networks:
+    - zknet
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+
+  kafka:
+    image: confluentinc/cp-kafka:4.0.0
+    restart: always
+    depends_on:
+    - zookeeper
+    ports:
+    - "99092:9092"
+    - "99091:9091"
+    networks:
+    - zknet
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:99091,PLAINTEXT_HOST://localhost:99092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 5242880
+      KAFKA_MESSAGE_MAX_BYTES: 5242880
+
+networks:
+  zknet:

@@ -1,0 +1,10 @@
+## vagrant-hostmanager-start
+172.27.37.54    zookeeper-1
+
+172.27.37.56    zookeeper-2
+
+172.27.37.57    zookeeper-3
+
+## vagrant-hostmanager-end
+
+kubectl port-forward kafka-manager-5f587f8c7f-p2b4z 9000:9000

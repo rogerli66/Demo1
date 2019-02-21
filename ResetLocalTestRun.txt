@@ -1,0 +1,12 @@
+1.
+git config --unset http.sslcainfo
+ git config --list --show-origin
+git clone git@git.com:
+
+regenerate ssl secretrKey
+ssh-keygen -t rsa -b 4096 -C "rli@gmail.com"
+
+eval $(ssh-agent -s)
+ssh-add ~/.ssh/id_rsa
+
+https://help.github.com/enterprise/2.13/user/articles/adding-a-new-ssh-key-to-your-github-account/
